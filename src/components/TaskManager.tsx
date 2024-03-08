@@ -1,19 +1,20 @@
 import { nanoid } from "nanoid";
 import { useState } from "react";
 import "./TaskManager.css";
+import { TaskData, eventTarget } from "../types";
+import Task from "./Task";
 
-// TODO: create custom hook to manage task state
-export const TaskManager = () => {
+export function TaskManager() {
   const [title, setTitle] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState<TaskData[]>([]);
 
   // remove task from list
-  const completeTask = (id) => {
+  const completeTask = (id: string) => {
     setTasks(tasks.filter((task) => task.id !== id));
   };
 
-  const updateTask = (id, taskUpdate) => {
+  const updateTask = (id: string, taskUpdate: TaskData) => {
     const newTasks = tasks.slice();
 
     const index = tasks.findIndex((task) => task.id === id);
@@ -33,11 +34,12 @@ export const TaskManager = () => {
       id: nanoid(),
       title,
     };
+
     setTasks((prev) => prev.concat(newTask));
     setTitle("");
   };
 
-  const handleSearch = (ev) => {
+  const handleSearch = (ev: eventTarget) => {
     setSearchKeyword(ev.target.value);
   };
 
@@ -47,6 +49,7 @@ export const TaskManager = () => {
 
   return (
     <div className="container">
+      
       <h1>Task Manager</h1>
 
       <div>
@@ -67,19 +70,10 @@ export const TaskManager = () => {
 
       <ul className="container">
         {filteredTasks.map((task) => (
-          <li key={task.id} className="task">
-            <div className="task">
-              <input
-                type="text"
-                placeholder="Add new task"
-                value={task.title}
-                onChange={(e) => updateTask(task.id, { title: e.target.value })}
-              />
-              <button onClick={() => completeTask(task.id)}>Done</button>
-            </div>
-          </li>
+          <Task key={task.id} task={task} updateTask={updateTask} completeTask={completeTask} />
         ))}
       </ul>
+
     </div>
-  );
-};
+  )
+}
