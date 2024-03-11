@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "./TaskManager.css";
-import { eventTarget } from "../types";
 import Task from "./Task";
 import useTaskManager from "../hooks/useTaskManager";
 
@@ -9,7 +8,7 @@ export function TaskManager() {
   const [searchKeyword, setSearchKeyword] = useState("");
   const { completeTask, updateTask, addTask, filterTasks } = useTaskManager();
 
-  const handleSearch = (ev: eventTarget) => {
+  const handleSearch = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(ev.target.value);
   };
 
